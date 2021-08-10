@@ -8,9 +8,13 @@ from datetime import datetime
 
 HIGH_LIMIT = 270
 LOW_LIMIT = 75
+DELTA = 15
 highest = None
 lowest = None
 CSV_FILE = None
+#ERROR_STRING = 
+USAGE_STRING = "\n Expected USAGE_STRING: dexhilo.py [-d DELTA][-h HIGH_LIMIT] [-l LOW_LIMIT] INPUT_FILE.csv"
+INVALID_STRING = "Error: invalid arguments"
 
 if len(sys.argv) < 2:
     print("Error: expected atleast two arguments")
@@ -21,69 +25,277 @@ elif len(sys.argv) == 2:
         
 elif len(sys.argv) == 3:
     print("Error: invalid arguments")
-    print("\n Expected usage: dexhilo.py [-h HIGH_LIMIT] [-l LOW_LIMIT] INPUT_FILE.csv")
+    print(USAGE_STRING)
     exit
     
 if len(sys.argv) == 4:
     if sys.argv[1] == '-h':
         if not sys.argv[2].isdigit():
-            print("Error: invalid argument: ", sys.argv[3])
-            print("\n Expected usage: dexhilo.py [-h HIGH_LIMIT] [-l LOW_LIMIT] INPUT_FILE.csv")
+            print(INVALID_STRING, sys.argv[2])
+            print(USAGE_STRING)
             exit
         else:
             HIGH_LIMIT = int(sys.argv[2])
             CSV_FILE = sys.argv[3]
     elif sys.argv[1] == '-l':
         if not sys.argv[2].isdigit():
-            print("Error: invalid argument: ", sys.argv[3])
-            print("\n Expected usage: dexhilo.py [-h HIGH_LIMIT] [-l LOW_LIMIT] INPUT_FILE.csv")        
+            print(INVALID_STRING, sys.argv[2])
+            print(USAGE_STRING)        
             exit
         else:
             LOW_LIMIT = int(sys.argv[2])
             CSV_FILE = sys.argv[3]
-if len(sys.argv) == 7:
+    elif sys.argv[1] == '-d':
+        if not sys.argv[2].isdigit():
+            print(INVALID_STRING, sys.argv[2])
+            print(USAGE_STRING)        
+            exit
+        else:
+            DELTA = int(sys.argv[2])
+            CSV_FILE = sys.argv[3]
+        
+if len(sys.argv) == 6:
     if sys.argv[1] == '-h':
         if not sys.argv[2].isdigit():
-            print("Error: invalid argument: ", sys.argv[3])
-            print("\n Expected usage: dexhilo.py [-h HIGH_LIMIT] [-l LOW_LIMIT] INPUT_FILE.csv")
+            print(INVALID_STRING, sys.argv[2])
+            print(USAGE_STRING)
             exit
         else:
             HIGH_LIMIT = int(sys.argv[2])
-            CSV_FILE = sys.argv[3]
             
-        if sys.argv[4] == '-l':
-            if not sys.argv[5].isdigit():
-                print("Error: invalid argument: ", sys.argv[3])
-                print("\n Expected usage: dexhilo.py [-h HIGH_LIMIT] [-l LOW_LIMIT] INPUT_FILE.csv")
+        if sys.argv[3] == '-l':
+            if not sys.argv[4].isdigit():
+                print(INVALID_STRING, sys.argv[4])
+                print(USAGE_STRING)
                 exit
             else:
-                LOW_LIMIT = int(sys.argv[5])
-                CSV_FILE = sys.argv[6]
+                LOW_LIMIT = int(sys.argv[4])
+                CSV_FILE = sys.argv[5]
+        elif sys.argv[4] == '-d':
+            if not sys.argv[3].isdigit():
+                print(INVALID_STRING, sys.argv[4])
+                print(USAGE_STRING)
+                exit
+            else:
+                DELTA = int(sys.argv[4])
+                CSV_FILE = sys.argv[5]
         else:
-            print("Error: invalid arguments")
-            print("\n Expected usage: dexhilo.py [-h HIGH_LIMIT] [-l LOW_LIMIT] INPUT_FILE.csv")
+            print(INVALID_STRING)
+            print(USAGE_STRING)
             exit
     elif sys.argv[1] == '-l':
         if not sys.argv[2].isdigit():
-            print("Error: invalid argument: ", sys.argv[2])
-            print("\n Expected usage: dexhilo.py [-h HIGH_LIMIT] [-l LOW_LIMIT] INPUT_FILE.csv")        
+            print(INVALID_STRING, sys.argv[2])
+            print(USAGE_STRING)        
             exit
         else:
             LOW_LIMIT = int(sys.argv[2])
-            CSV_FILE = sys.argv[3]
-        if sys.argv[4] == '-h':
-            if not sys.argv[5].isdigit():
-                print("Error: invalid argument: ", sys.argv[3])
-                print("\n Expected usage: dexhilo.py [-h HIGH_LIMIT] [-l LOW_LIMIT] INPUT_FILE.csv")
+            #CSV_FILE = sys.argv[3]
+        if sys.argv[3] == '-h':
+            if not sys.argv[4].isdigit():
+                print(INVALID_STRING, sys.argv[4])
+                print(USAGE_STRING)
                 exit
             else:
-                HIGH_LIMIT = int(sys.argv[5])
-                CSV_FILE = sys.argv[6]
+                HIGH_LIMIT = int(sys.argv[4])
+                CSV_FILE = sys.argv[5]
+                
+        elif sys.argv[3] == '-d':
+            if not sys.argv[4].isdigit():
+                print(INVALID_STRING, sys.argv[4])
+                print(USAGE_STRING)
+                exit
+            else:
+                DELTA = int(sys.argv[4])
+                CSV_FILE = sys.argv[5]
+                
+    elif sys.argv[1] == '-d':
+        if not sys.argv[2].isdigit():
+            print(INVALID_STRING, sys.argv[2])
+            print(USAGE_STRING)        
+            exit
+        else:
+            DELTA = int(sys.argv[2])
+        if sys.argv[3] == '-h':
+            if not sys.argv[4].isdigit():
+                print(INVALID_STRING, sys.argv[4])
+                print(USAGE_STRING)
+                exit
+            else:
+                HIGH_LIMIT = int(sys.argv[4])
+                CSV_FILE = sys.argv[5]
+                
+        elif sys.argv[3] == '-l':
+            if not sys.argv[4].isdigit():
+                print(INVALID_STRING, sys.argv[4])
+                print(USAGE_STRING)
+                exit
+            else:
+                DELTA = int(sys.argv[4])
+                CSV_FILE = sys.argv[5]
+        else:
+            print(INVALID_STRING)
+            print(USAGE_STRING)
+            exit
+    else:
+        print(INVALID_STRING, sys.argv[1])
+        print(USAGE_STRING)
+        exit
+        
+if len(sys.argv) == 8:
+    if sys.argv[1] == '-h':
+        if not sys.argv[2].isdigit():
+            print(INVALID_STRING, sys.argv[2])
+            print(USAGE_STRING)
+            exit
+        else:
+            HIGH_LIMIT = int(sys.argv[2])
+            
+        if sys.argv[3] == '-l':
+            if not sys.argv[4].isdigit():
+                print(INVALID_STRING, sys.argv[4])
+                print(USAGE_STRING)
+                exit
+            else:
+                LOW_LIMIT = int(sys.argv[4])
+                if sys.argv[5] == '-d':
+                    if not sys.argv[6].isdigit():
+                        print(INVALID_STRING, sys.argv[6])
+                        print(USAGE_STRING)
+                        exit
+                    else:
+                        DELTA = int(sys.argv[6])
+                        CSV_FILE = sys.argv[7]
+                else:
+                    print(INVALID_STRING, sys.argv[5])
+                    print(USAGE_STRING)
+                    exit
+        elif sys.argv[3] == '-d':
+            if not sys.argv[4].isdigit():
+                print(INVALID_STRING, sys.argv[4])
+                print(USAGE_STRING)
+                exit
+            else:
+                DELTA = int(sys.argv[4])
+                if sys.argv[5] == '-l':
+                    if not sys.argv[6].isdigit():
+                        print(INVALID_STRING, sys.argv[6])
+                        print(USAGE_STRING)
+                        exit
+                    else:
+                        LOW_LIMIT = int(sys.argv[6])
+                        CSV_FILE = sys.argv[7]
+                else:
+                    print(INVALID_STRING, sys.argv[5])
+                    print(USAGE_STRING)
+                    exit
                 
         else:
-            print("Error: invalid arguments")
-            print("\n Expected usage: dexhilo.py [-h HIGH_LIMIT] [-l LOW_LIMIT] INPUT_FILE.csv")
+            print(INVALID_STRING)
+            print(USAGE_STRING)
             exit
+    elif sys.argv[1] == '-l':
+        if not sys.argv[2].isdigit():
+            print(INVALID_STRING, sys.argv[2])
+            print(USAGE_STRING)        
+            exit
+        else:
+            LOW_LIMIT = int(sys.argv[2])
+            #CSV_FILE = sys.argv[3]
+        if sys.argv[3] == '-h':
+            if not sys.argv[4].isdigit():
+                print(INVALID_STRING, sys.argv[4])
+                print(USAGE_STRING)
+                exit
+            else:
+                HIGH_LIMIT = int(sys.argv[4])
+                if sys.argv[5] == '-d':
+                    if not sys.argv[6].isdigit():
+                        print(INVALID_STRING, sys.argv[6])
+                        print(USAGE_STRING)
+                        exit
+                    else:
+                        DELTA = int(sys.argv[6])
+                        CSV_FILE = sys.argv[7]
+                else:
+                    print(INVALID_STRING, sys.argv[5])
+                    print(USAGE_STRING)
+                    exit
+                
+        elif sys.argv[3] == '-d':
+            if not sys.argv[4].isdigit():
+                print(INVALID_STRING, sys.argv[4])
+                print(USAGE_STRING)
+                exit
+            else:
+                DELTA = int(sys.argv[4])
+                if sys.argv[5] == '-h':
+                    if not sys.argv[6].isdigit():
+                        print(INVALID_STRING, sys.argv[6])
+                        print(USAGE_STRING)
+                        exit
+                    else:
+                        HIGH_LIMIT = int(sys.argv[6])
+                        CSV_FILE = sys.argv[7]
+                else:
+                    print(INVALID_STRING, sys.argv[5])
+                    print(USAGE_STRING)
+                    exit
+                
+        elif sys.argv[1] == '-d':
+            if not sys.argv[2].isdigit():
+                print(INVALID_STRING, sys.argv[2])
+                print(USAGE_STRING)        
+                exit
+            else:
+                DELTA = int(sys.argv[2])
+            if sys.argv[3] == '-h':
+                if not sys.argv[4].isdigit():
+                    print(INVALID_STRING, sys.argv[4])
+                    print(USAGE_STRING)
+                    exit
+                else:
+                    HIGH_LIMIT = int(sys.argv[4])
+                    if sys.argv[5] == '-l':
+                        if not sys.argv[6].isdigit():
+                            print(INVALID_STRING, sys.argv[6])
+                            print(USAGE_STRING)
+                            exit
+                        else:
+                            LOW_LIMIT = int(sys.argv[6])
+                            CSV_FILE = sys.argv[7]
+                    else:
+                        print(INVALID_STRING, sys.argv[5])
+                        print(USAGE_STRING)
+                        exit
+                
+        elif sys.argv[3] == '-l':
+            if not sys.argv[4].isdigit():
+                print(INVALID_STRING, sys.argv[4])
+                print(USAGE_STRING)
+                exit
+            else:
+                LOW_LIMIT = int(sys.argv[4])
+                if sys.argv[5] == '-h':
+                    if not sys.argv[6].isdigit():
+                        print(INVALID_STRING, sys.argv[6])
+                        print(USAGE_STRING)
+                        exit
+                    else:
+                        HIGH_LIMIT = int(sys.argv[6])
+                        CSV_FILE = sys.argv[7]
+                else:
+                    print(INVALID_STRING, sys.argv[5])
+                    print(USAGE_STRING)
+                    exit
+        else:
+            print(INVALID_STRING)
+            print(USAGE_STRING)
+            exit
+    else:
+        print(INVALID_STRING, sys.argv[1])
+        print(USAGE_STRING)
+        exit
 
 with open(CSV_FILE, newline='', encoding='utf-8') as csvfile:
         reader = csv.DictReader(csvfile)
